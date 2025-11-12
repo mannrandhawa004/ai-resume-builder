@@ -23,8 +23,8 @@ const App = () => {
 
           {/* Add more nested routes here if needed */}
           <Route path='dashboard' element={<Dashboard />} />
-        </Route>
           <Route path='builder' element={<ResumeBuilder />} />
+        </Route>
       </Routes>
     </>
   )
