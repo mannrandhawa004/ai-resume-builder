@@ -6,7 +6,9 @@ import ColorPicker from '../components/ColorPicker'
 import PersonalInfoForm from '../components/PersonalInfoForm'
 import ProfessionalSummaryForm from '../components/PersonalSummary'
 import ExperienceForm from '../components/ExperienceForm'
-import EducationForm from './EducationForm'
+import EducationForm from '../components/EducationForm'
+import ProjectForm from '../components/ProjectForm'
+import SkillsForm from '../components/SkillsForm'
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams()
@@ -18,7 +20,7 @@ const ResumeBuilder = () => {
     professional_summary: "",
     experience: [],
     education: [],
-    projects: [],
+    project: [],
     skills: [],
     template: "classic",
     accent_color: "#3B82F6",
@@ -86,10 +88,15 @@ const ResumeBuilder = () => {
                 {activeSection.id === 'experience' && (
                   <ExperienceForm data={resumeData.experience} onChange={(data) => setResumeData(prev => ({ ...prev, experience: data }))} />
                 )}
-                 {activeSection.id === 'education' && (
-                    <EducationForm data={resumeData.education} onChange={(data)=> setResumeData(prev=> ({...prev, education: data}))}/>
-                  )}
-
+                {activeSection.id === 'education' && (
+                  <EducationForm data={resumeData.education} onChange={(data) => setResumeData(prev => ({ ...prev, education: data }))} />
+                )}
+                {activeSection.id === 'projects' && (
+                  <ProjectForm data={resumeData.project} onChange={(data) => setResumeData(prev => ({ ...prev, project: data }))} />
+                )}
+                {activeSection.id === 'skills' && (
+                  <SkillsForm data={resumeData.skills} onChange={(data) => setResumeData(prev => ({ ...prev, skills: data }))} />
+                )}
 
               </div>
 
