@@ -1,8 +1,12 @@
-import { ArrowLeftIcon } from 'lucide-react'
+import { ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, EyeOffIcon, FileText, FolderIcon, GraduationCap, Share2Icon, Sparkles, User } from 'lucide-react'
 import React, { useState } from 'react'
-import { useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 import TemplateSelector from '../components/TemplateSelector'
 import ColorPicker from '../components/ColorPicker'
+import PersonalInfoForm from '../components/PersonalInfoForm'
+import ProfessionalSummaryForm from '../components/PersonalSummary'
+import ExperienceForm from '../components/ExperienceForm'
+import EducationForm from './EducationForm'
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams()
@@ -76,6 +80,15 @@ const ResumeBuilder = () => {
                 {activeSection.id === 'personal' && (
                   <PersonalInfoForm data={resumeData.personal_info} onChange={(data) => setResumeData(prev => ({ ...prev, personal_info: data }))} removeBackground={removeBackground} setRemoveBackground={setRemoveBackground} />
                 )}
+                {activeSection.id === 'summary' && (
+                  <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(data) => setResumeData(prev => ({ ...prev, professional_summary: data }))} setResumeData={setResumeData} />
+                )}
+                {activeSection.id === 'experience' && (
+                  <ExperienceForm data={resumeData.experience} onChange={(data) => setResumeData(prev => ({ ...prev, experience: data }))} />
+                )}
+                 {activeSection.id === 'education' && (
+                    <EducationForm data={resumeData.education} onChange={(data)=> setResumeData(prev=> ({...prev, education: data}))}/>
+                  )}
 
 
               </div>
