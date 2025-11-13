@@ -19,3 +19,49 @@ export class UnauthorizedError extends AppError {
         super(message, 401)
     }
 }
+
+export class NotFoundError extends AppError {
+    constructor(message = "Resource not found") {
+        super(message, 404)
+    }
+}
+export class conflictError extends AppError {
+    constructor(message = "Conflict occurs") {
+        super(message, 409)
+    }
+}
+export class ServerError extends AppError {
+    constructor(message = "Server Error") {
+        super(message, 500)
+    }
+}
+export class ForbiddenErorr extends AppError {
+    constructor(message = "Forbidden - Admin only") {
+        super(message, 403)
+    }
+}
+
+export const Errohandler = (err, req, res, next) => {
+    if (err instanceof AppError) {
+        return res.status(err.statusCode).json({
+            sucess: false,
+            message: err.message
+        })
+    }
+
+    if (err.name === "ValidationError") {
+        const errors = Object.values(err.errors).map(e => e.message)
+        return res.status(400).json({
+            success: false,
+            message: "Validarition failed",
+            errors
+        })
+    }
+
+    console.log("Unexpected error:", err)
+    res.status(500).json({
+        success: false,
+        message: "Internal server error"
+    })
+
+}
