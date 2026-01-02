@@ -1,24 +1,25 @@
-import cookieParser from "cookie-parser"
-import { configDotenv } from "dotenv"
-configDotenv({
-    path: ".env"
-})
-import express from "express"
-import connectDB from "./configs/db.config.js"
-import { Errohandler } from "./utils/errorHandler.js"
-import userRoutes from "./routes/user.routes.js"
-const PORT = process.env.PORT || 8000
-const app = express()
-app.use(express.urlencoded({ extended: true }))
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import connectDB from "./configs/db.js";
+import userRouter from "./routes/user.routes.js";
+import resumeRouter from "./routes/resumeRoutes.js";
+import aiRouter from "./routes/aiRoutes.js";
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Database connection
+await connectDB()
+
 app.use(express.json())
-app.use(cookieParser())
-app.use(Errohandler)
+app.use(cors())
 
-app.use("/api/user", userRoutes)
+app.get('/', (req, res) => res.send("Server is live..."))
+app.use('/api/users', userRouter)
 
 
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 
-app.listen(PORT, async () => {
-    await connectDB()
-    console.log(`Server running on port ${PORT}`)
-})
+});
