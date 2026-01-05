@@ -1,21 +1,173 @@
-📄 Professional AI Resume BuilderA high-performance, interactive web application that allows users to create, customize, and export professional resumes in real-time. Featuring a live A4 preview engine, a library of 8 distinct templates, and an intuitive step-by-step editing interface.🚀 Key Features8 Professional Templates: Choose from a variety of layouts including Executive, Creative Grid, Technical, and Minimalist designs.Live A4 Preview: A custom-built rendering engine that simulates a real A4 page, ensuring what you see is exactly what you get.Template Gallery: High-fidelity modal gallery that previews your actual data across all available layouts before you switch.Intelligent Export: Optimized Print-to-PDF engine with CSS media queries that force perfect A4 dimensions and color accuracy.Auto-Fill Functionality: Instant onboarding by filling the form with professional sample data.Smart Dashboard: Manage multiple resumes, edit titles, and track "Public" vs. "Draft" status.Custom Accent Colors: Brand your resume with a dynamic color picker that updates themes globally.🛠️ Technical StackFrontend: React.js, Tailwind CSSState Management: Redux ToolkitIcons: Lucide ReactAPI/Backend: Axios (Connecting to a Node.js/Express REST API)Notifications: React Hot ToastStyling: Styled-components (for print media queries) and Tailwind utility classes.
+# 📄 Professional AI Resume Builder
 
-📂 Project StructurePlaintext
-src/
-├── components/
-│   ├── templates/            # 8 Unique Resume Layouts
-│   ├── ResumePreview.jsx     # Live A4 Rendering Engine
-│   ├── TemplateGalleryModal.jsx # Visual Layout Discovery
-│   └── ...                   # Modular Form Components (Education, Experience, etc.)
-├── pages/
-│   ├── ResumeBuilder.jsx     # Main Workspace & State Coordinator
-│   └── Dashboard.jsx         # User Resume Management
-├── assets/
-│   └── assets.js             # Dummy Profiles & Sample Data
-└── configs/
-    └── api.js                # Axios Instance Configuration
-🎨 Available TemplatesTemplateFocusBest ForThe ClassicTraditionalAcademic, Gov, Entry-levelExecutive SidebarTwo-column, High-endSenior Management, Tech LeadsCreative GridBold, Magazine-styleDesigners, Marketing, TechTechnical ProSkill/Progress barsSoftware Engineers, IT SpecialistsBold MinimalAuthoritative, High-contrastLaw, Banking, FinanceModern EdgeBalanced, CleanSales, Mid-level Professional📥 Installation & SetupClone the repositoryBashgit clone https://github.com/mannrandhawa004/ai-resume-builder
+A **high-performance, interactive web application** that allows users to create, customize, and export professional resumes in real-time. The platform features a **live A4 preview engine**, a library of **8 professionally designed templates**, and an intuitive **step-by-step resume editing workflow**.
+
+---
+
+## 🚀 Key Features
+
+* **8 Professional Resume Templates**
+  Includes Executive, Creative Grid, Technical, Minimalist, and more — tailored for different career paths.
+
+* **Live A4 Preview Engine**
+  Custom-built renderer that perfectly simulates a real A4 page. What you see is exactly what you export.
+
+* **Template Gallery Modal**
+  Preview your *actual resume data* across all templates before switching layouts.
+
+* **Intelligent PDF Export**
+  Optimized Print-to-PDF system using CSS print media queries for pixel-perfect A4 dimensions and color accuracy.
+
+* **Auto-Fill with Sample Data**
+  Instantly populate the builder with professional dummy data for quick onboarding.
+
+* **Smart Resume Dashboard**
+  Manage multiple resumes, rename titles.
+
+* **Custom Accent Colors**
+  Global theme color picker to brand your resume dynamically.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* **React.js**
+* **Tailwind CSS**
+* **Redux Toolkit** (State Management)
+* **Lucide React** (Icons)
+* **Axios** (API Communication)
+* **React Hot Toast** (Notifications)
+* **Styled-components** (Print & PDF styling)
+
+### Backend
+
+* **Node.js**
+* **Express.js**
+* **MongoDB** with **Mongoose**
+* **JWT Authentication**
+* **ImageKit** (Profile image uploads)
+* **MVC Architecture**
+
+### AI Integration
+
+* **Google Gemini API (OpenAI-compatible endpoint)**
+  Used for resume content suggestions and AI-assisted enhancements.
+
+---
+
+## 🎨 Available Resume Templates
+
+| Template Name     | Focus / Style                | Best For                       |
+| ----------------- | ---------------------------- | ------------------------------ |
+| The Classic       | Traditional, clean           | Academic, Govt, Entry-level    |
+| Executive Sidebar | Two-column, premium          | Senior Management, Tech Leads  |
+| Creative Grid     | Bold, magazine-style         | Designers, Marketing           |
+| Technical Pro     | Skill bars, structured       | Software Engineers, IT         |
+| Bold Minimal      | High-contrast, authoritative | Law, Banking, Finance          |
+| Modern Edge       | Balanced, modern             | Sales, Mid-level Professionals |
+| (More…)           | Custom layouts               | Various industries             |
+
+The backend follows a **clean MVC (Model–View–Controller)** architecture for scalability and maintainability.
+
+
+## 🖼️ Image Uploads
+
+* Profile images are uploaded using **ImageKit**
+* Secure upload handled via backend service layer
+* Optimized delivery with CDN support
+
+---
+
+## 🔐 Environment Variables (Example)
+
+Create a `.env` file in your backend root directory:
+
+```env
+# Server
+PORT=5000
+
+# Database
+MONGODB_URI=mongodb://127.0.0.1:27017/resume_builder
+
+# Authentication
+JWT_SECRET=your_jwt_secret_here
+
+# ImageKit
+IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
+IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
+IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_id
+
+# AI (Gemini / OpenAI-compatible)
+OPENAI_API_KEY=your_api_key_here
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+OPENAI_MODEL=gemini-2.5-flash
+```
+
+⚠️ **Never commit real secrets to GitHub.** Use placeholders only.
+
+---
+
+## 📥 Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/mannrandhawa004/ai-resume-builder
 cd resume-builder
-Install dependenciesBashnpm install
-Configure APICreate a .env file or update src/configs/api.js with your backend URL.Start the development serverBashnpm run dev
-🖨️ PDF Export InstructionsTo get the best result when exporting:Click the Export or Download PDF button.In the Print Dialog, set Destination to "Save as PDF".Under More Settings, ensure Margins are set to "None".Ensure Background Graphics is checked to display your accent colors and sidebars.🤝 ContributionContributions are welcome! If you have a new template design or a feature request, feel free to fork the repo and open a Pull Request.Would you like me to add a "License" section or a "Screenshots" placeholder section to this file?
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+cd client 
+npm install
+
+cd server
+npm innstall
+```
+
+### 3️⃣ Configure API
+
+* Update `src/configs/api.js` with your backend base URL
+* Create a `.env` file for backend configuration
+
+### 4️⃣ Run Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+## 🖨️ PDF Export Instructions
+
+For best export quality:
+
+1. Click **Export / Download PDF**
+2. Destination → **Save as PDF**
+3. Margins → **None**
+4. Enable **Background Graphics**
+
+This ensures perfect A4 layout and accent color rendering.
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome 🎉
+
+* Add new resume templates
+* Improve UI/UX
+* Enhance AI suggestions
+
+Fork the repository and open a **Pull Request**.
+
+---
+
+## 📜 License
+
+MIT License © 2026 Manpreet Singh
+
+---

@@ -1,6 +1,6 @@
 import express from "express";
-import protect from "../middleware/authMiddleware.js";
-import { createResume, deleteResume, getPublicResumeById, getResumeById, updateResume } from "../controllers/resume.controllers.js";
+import protect from "../middlewares/authMiddleware.js";
+import { createResume, deleteResume, getPublicResumeById, getResumeById, updateResume } from "../controllers/resumeController.js";
 import upload from "../configs/multer.js";
 
 const resumeRouter = express.Router();

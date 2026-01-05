@@ -15,7 +15,7 @@ const ResumeSchema = new mongoose.Schema({
     },
     template: {
         type: String,
-        default: "classic"
+        // default: "classic"
     },
     accent_color: {
         type: String,
