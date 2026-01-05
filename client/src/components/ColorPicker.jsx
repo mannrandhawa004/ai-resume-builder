@@ -42,4 +42,3 @@ const ColorPicker = ({selectedColor, onChange }) => {
 }
 
 export default ColorPicker
-

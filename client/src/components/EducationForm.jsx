@@ -15,12 +15,14 @@ const addEducation = () =>{
 }
 
 const removeEducation = (index)=>{
-  
+    const updated = data.filter((_, i)=> i !== index);
+    onChange(updated)
 }
 
 const updateEducation = (index, field, value)=>{
-
-  
+    const updated = [...data];
+    updated[index] = {...updated[index], [field]: value}
+    onChange(updated)
 }
 
   return (
