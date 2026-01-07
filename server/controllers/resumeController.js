@@ -76,17 +76,16 @@ export const updateResume = async (req, res) => {
         const { resumeId, resumeData, removeBackground } = req.body;
         const image = req.file;
 
-    
-        // console.log("body",req.body)
+
+        // console.log(`resume data: ${resumeData}`)
 
         let resumeDataCopy;
         if (typeof resumeData === 'string') {
-            resumeDataCopy = JSON.parse(resumeData); // No await needed for JSON.parse
+            resumeDataCopy = JSON.parse(resumeData); 
         } else {
             resumeDataCopy = { ...resumeData };
         }
 
-        // IMAGE PROCESSING
         if (image) {
             const imageBufferData = fs.createReadStream(image.path);
 
@@ -101,7 +100,6 @@ export const updateResume = async (req, res) => {
 
             resumeDataCopy.personal_info.image = response.url;
 
-            // Optional: Delete the temp file created by multer after upload
             if (fs.existsSync(image.path)) fs.unlinkSync(image.path);
         }
 
@@ -110,8 +108,7 @@ export const updateResume = async (req, res) => {
             resumeDataCopy,
             { new: true }
         );
-        // console.log(resume)
-        // console.log(userId)
+
 
         if (!resume) {
             return res.status(404).json({ message: "Resume not found or unauthorized" });

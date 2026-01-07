@@ -1,6 +1,6 @@
-import { 
-  PlusIcon, Trash2, FileText, Sparkles, AlertCircle, 
-  Layers, Clock, X, ChevronRight, FilePlus2
+import {
+  PlusIcon, Trash2, FileText, Layers, X, ChevronRight, FilePlus2,
+  Search, MoreHorizontal, LayoutTemplate
 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -9,20 +9,41 @@ import api from '../configs/api'
 import toast from 'react-hot-toast'
 import TemplateGalleryModal from '../components/TemplateGalleryModal'
 
+import ModernTemplate from '../components/templates/ModernTemplate'
+import MinimalTemplate from '../components/templates/MinimalTemplate'
+import MinimalImageTemplate from '../components/templates/MinimalImageTemplate'
+import TechnicalTemplate from '../components/templates/TechnicalTemplate'
+import ExecutiveSidebarTemplate from '../components/templates/ExecutiveSidebarTemplate'
+import ClassicTemplate from '../components/templates/ClassicTemplate'
+import BoldMinimalTemplate from '../components/templates/BoldMinimalTemplate'
+import CreativeGridTemplate from '../components/templates/CreativeGridTemplate'
+
 const Dashboard = () => {
   const { token, user } = useSelector(state => state.auth)
   const navigate = useNavigate()
 
   const [allResumes, setAllResumes] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  
-  // Modal States
+
   const [showNameModal, setShowNameModal] = useState(false)
   const [showGalleryModal, setShowGalleryModal] = useState(false)
   const [resumeToDelete, setResumeToDelete] = useState(null)
 
   // Form States
   const [title, setTitle] = useState('')
+
+
+  const TEMPLATE_MAP = {
+    'modern': ModernTemplate,
+    'minimal': MinimalTemplate,
+    'minimal-image': MinimalImageTemplate,
+    'technical': TechnicalTemplate,
+    'executive': ExecutiveSidebarTemplate,
+    'classic': ClassicTemplate,
+    'bold': BoldMinimalTemplate,
+    'creative': CreativeGridTemplate,
+    'default': MinimalTemplate
+  }
 
   const loadAllResumes = async () => {
     try {
@@ -34,17 +55,13 @@ const Dashboard = () => {
     }
   }
 
-  // Phase 1: Validating Title
   const proceedToTemplateSelection = (e) => {
     e.preventDefault()
     if (!title.trim()) return toast.error("Please provide a project name")
-    
     setShowNameModal(false)
-    // Small timeout ensures smooth transition between modals
     setTimeout(() => setShowGalleryModal(true), 150)
   }
 
-  // Phase 2: Final Creation
   const handleFinalCreate = async (templateId) => {
     if (isLoading) return
     setIsLoading(true)
@@ -77,183 +94,132 @@ const Dashboard = () => {
   useEffect(() => { loadAllResumes() }, [])
 
   return (
-    <div className='min-h-screen bg-[#F9F9F8] pb-20 font-sans text-slate-900 selection:bg-amber-100 selection:text-amber-900'>
-      <div className='max-w-[1700px] mx-auto px-6 sm:px-12 pt-20'>
+    <div className='min-h-screen bg-slate-50/50 pb-20 font-sans text-slate-900'>
+      <div className='max-w-[1600px] mx-auto px-6 sm:px-10 pt-16'>
 
         {/* --- HEADER SECTION --- */}
-        <div className='mb-20 flex flex-col md:flex-row md:items-end justify-between gap-10'>
-          <div className='animate-in fade-in slide-in-from-left-4 duration-700'>
-            <div className='flex items-center gap-3 mb-6'>
-              <div className='px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black uppercase tracking-[0.2em] rounded-md'>
-                Active Workspace
-              </div>
-              <div className='h-1 w-1 bg-slate-300 rounded-full' />
-              <span className='text-[10px] font-bold text-slate-400 uppercase tracking-widest'>
-                {user?.name || 'Authorized Member'}
-              </span>
+        <div className='flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16'>
+          <div className='space-y-2'>
+            <div className='flex items-center gap-2 text-xs font-bold text-amber-600 uppercase tracking-widest'>
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+              {user?.name || 'Workspace'}
             </div>
-            <h1 className='text-6xl sm:text-7xl font-extralight tracking-tighter text-slate-900'>
-              The <span className='font-bold text-amber-600 italic'>Library.</span>
+            <h1 className='text-4xl sm:text-5xl font-bold tracking-tight text-slate-900'>
+              My <span className='text-slate-400 font-serif italic'>Resumes</span>
             </h1>
-            <p className='text-slate-400 text-sm mt-5 max-w-md leading-relaxed'>
-              Select a blueprint to begin editing or initialize a new professional identity.
-            </p>
           </div>
 
           <button
             onClick={() => { setTitle(''); setShowNameModal(true) }}
-            className='group flex items-center gap-4 px-10 py-5 bg-slate-900 text-white rounded-[2rem] hover:bg-black transition-all shadow-2xl shadow-slate-200 active:scale-95 animate-in fade-in zoom-in duration-700'
+            className='group flex items-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-full hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl active:scale-95'
           >
-            <PlusIcon size={20} className='group-hover:rotate-90 transition-transform duration-500' />
-            <span className='text-[11px] font-black uppercase tracking-[0.2em]'>New Project</span>
+            <PlusIcon size={18} className='text-amber-400 group-hover:rotate-90 transition-transform duration-300' />
+            <span className='text-xs font-bold uppercase tracking-widest'>Create New</span>
           </button>
         </div>
 
         {/* --- MAIN GRID --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-12">
-          
-          {/* Bento-style Empty Action Card */}
-          <div 
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 sm:gap-8">
+
+          {/* Create New Card */}
+          <div
             onClick={() => { setTitle(''); setShowNameModal(true) }}
-            className='aspect-[3/4.2] border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center gap-6 cursor-pointer hover:border-amber-400 hover:bg-amber-50/40 transition-all group'
+            className='group aspect-[1/1.41] border border-dashed border-slate-300 rounded-3xl flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-amber-400 hover:bg-amber-50/50 transition-all duration-300'
           >
-            <div className='size-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-amber-100 group-hover:text-amber-600 transition-all duration-500'>
-              <FilePlus2 size={28} />
+            <div className='size-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 group-hover:scale-110 group-hover:text-amber-500 transition-all'>
+              <PlusIcon size={24} />
             </div>
-            <div className='text-center'>
-              <span className='block text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-amber-600'>Initialize</span>
-              <span className='block text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-1'>New Blueprint</span>
-            </div>
+            <span className='text-[10px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-amber-600'>New Resume</span>
           </div>
 
-          {allResumes.map((resume, idx) => (
-            <div 
-              key={resume._id} 
-              className='group relative flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700'
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
+          {/* Resume Cards */}
+          {allResumes.map((resume, idx) => {
+            // 3. SELECT THE CORRECT COMPONENT
+            const TemplateComponent = TEMPLATE_MAP[resume.template] || TEMPLATE_MAP['default'];
+            // console.log(TemplateComponent)
+
+            return (
               <div
-                onClick={() => navigate(`/app/builder/${resume._id}`)}
-                className='relative aspect-[3/4.2] bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden cursor-pointer transition-all duration-1000 group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] group-hover:-translate-y-4 group-hover:border-amber-200'
+                key={resume._id}
+                className='group flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-500'
+                style={{ animationDelay: `${idx * 50}ms` }}
               >
-                {/* Visual Content Placeholder */}
-                <div className='absolute inset-0 p-10 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-700'>
-                  <div className='h-4 w-2/3 bg-slate-900 rounded-full mb-8' />
-                  <div className='space-y-4'>
-                    {[...Array(10)].map((_, i) => (
-                      <div key={i} className={`h-2 w-full bg-slate-900 rounded-full ${i % 4 === 0 ? 'w-3/4' : ''}`} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Glass Hover Pill */}
-                <div className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
-                   <div className='bg-white/90 backdrop-blur-md px-8 py-3.5 rounded-full shadow-2xl flex items-center gap-3 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700'>
-                      <Layers size={16} className='text-amber-600' />
-                      <span className='text-[11px] font-black uppercase tracking-widest text-slate-900'>Open Blueprint</span>
-                   </div>
-                </div>
-              </div>
-
-              <div className='mt-8 px-4 flex justify-between items-start'>
-                <div className='overflow-hidden'>
-                  <h3 className='text-base font-bold text-slate-800 tracking-tight group-hover:text-amber-600 transition-colors truncate'>{resume.title}</h3>
-                  <div className='flex items-center gap-3 mt-2'>
-                    <div className='size-1.5 bg-amber-500 rounded-full' />
-                    <span className='text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]'>{resume.template}</span>
-                  </div>
-                </div>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setResumeToDelete(resume._id) }} 
-                  className='p-2.5 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all'
+                {/* Card Container */}
+                <div
+                  onClick={() => navigate(`/app/builder/${resume._id}`)}
+                  className='relative aspect-[1/1.41] bg-white shadow-sm overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-amber-200 transition-all duration-300'
                 >
-                  <Trash2 size={18} />
-                </button>
+
+                  {/* --- 4. REAL TEMPLATE PREVIEW --- */}
+                  {/* We scale the A4 resume down to fit the card */}
+                  <div className='absolute top-0 left-0 w-[210mm] origin-top-left transform scale-[0.2] sm:scale-[0.25] md:scale-[0.3] lg:scale-[0.22] xl:scale-[0.26] 2xl:scale-[0.3] pointer-events-none select-none bg-white'>
+                    <TemplateComponent
+                      data={resume}
+                      accentColor={resume.accent_color}
+                    />
+                  </div>
+
+                  {/* Hover Overlay with Open Button */}
+                  <div className='absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors flex items-center justify-center z-10'>
+                    <button className='opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all bg-white text-slate-900 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-2'>
+                      Open <ChevronRight size={12} />
+                    </button>
+                  </div>
+
+                  {/* Delete Button */}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setResumeToDelete(resume._id) }}
+                    className='absolute top-3 right-3 p-2 bg-white/90 backdrop-blur text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm z-20'
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+
+                {/* Info Footer */}
+                <div className='px-1'>
+                  <h3 className='text-sm font-bold text-slate-800 truncate leading-tight group-hover:text-amber-600 transition-colors'>{resume.title}</h3>
+                  <div className='flex items-center gap-2 mt-1'>
+                    <LayoutTemplate size={10} className="text-slate-400" />
+                    <span className='text-[10px] font-medium text-slate-400 uppercase tracking-wider truncate'>{resume.template || "Minimal"}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
-        {/* --- MODAL: NAME IDENTITY --- */}
+        {/* --- MODALS (Same as before) --- */}
         {showNameModal && (
-          <div className='fixed inset-0 bg-slate-900/60 backdrop-blur-xl z-[100] flex items-center justify-center p-6 animate-in fade-in duration-500'>
-            <div className='bg-white rounded-[3.5rem] p-16 w-full max-w-2xl relative shadow-2xl border border-white/20 animate-in zoom-in-95 duration-500'>
-              <button 
-                onClick={() => setShowNameModal(false)}
-                className='absolute top-10 right-10 text-slate-300 hover:text-slate-900 transition-colors'
-              >
-                <X size={24} />
-              </button>
-
-              <div className='text-center mb-14'>
-                <div className='size-20 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mx-auto mb-8'>
-                  <FileText size={40} />
-                </div>
-                <h2 className='text-4xl font-light tracking-tight text-slate-900'>Project <span className='font-bold italic'>Identity.</span></h2>
-                <p className='text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-4'>Establish a unique name for this blueprint</p>
+          <div className='fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200'>
+            <div className='bg-white rounded-3xl p-8 sm:p-10 w-full max-w-lg relative shadow-2xl animate-in zoom-in-95 duration-300'>
+              <button onClick={() => setShowNameModal(false)} className='absolute top-6 right-6 text-slate-400 hover:text-slate-800 transition-colors'><X size={20} /></button>
+              <div className='text-center mb-8'>
+                <div className='size-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm'><FileText size={24} /></div>
+                <h2 className='text-2xl font-bold text-slate-900'>Name your Project</h2>
+                <p className='text-sm text-slate-500 mt-2'>Give your resume a unique name.</p>
               </div>
-
-              <form onSubmit={proceedToTemplateSelection} className='space-y-12'>
-                <div className='relative'>
-                    <input
-                    autoFocus
-                    className='w-full py-6 text-4xl text-center border-b-2 border-slate-100 outline-none focus:border-amber-500 transition-all placeholder:text-slate-100 font-light'
-                    placeholder="e.g. Creative Director 2026"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-
-                <div className='flex flex-col sm:flex-row gap-6'>
-                  <button 
-                    type="button" 
-                    onClick={() => setShowNameModal(false)} 
-                    className='flex-1 py-5 text-slate-400 uppercase text-[11px] font-black tracking-widest hover:text-slate-900 transition-colors'
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit" 
-                    className='flex-1 py-5 bg-slate-900 text-white rounded-[1.5rem] uppercase text-[11px] font-black tracking-widest shadow-2xl shadow-slate-200 hover:bg-black transition-all flex items-center justify-center gap-3'
-                  >
-                    Select Layout <ChevronRight size={16} />
-                  </button>
-                </div>
+              <form onSubmit={proceedToTemplateSelection} className='space-y-6'>
+                <input autoFocus className='w-full py-4 px-4 text-lg text-center bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-amber-500 focus:bg-white transition-all placeholder:text-slate-300 font-medium' placeholder="e.g. Senior Developer 2026" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <button type="submit" className='w-full py-4 bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-black transition-all flex items-center justify-center gap-2'>Choose Template <ChevronRight size={14} /></button>
               </form>
             </div>
           </div>
         )}
 
-        {/* --- MODAL: DESTRUCTIVE ACTION --- */}
         {resumeToDelete && (
-          <div className='fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[110] flex items-center justify-center p-6 animate-in fade-in duration-300'>
-            <div className='bg-white p-14 rounded-[3.5rem] max-w-md w-full text-center shadow-2xl border border-slate-50 animate-in zoom-in-95 duration-500'>
-              <div className='size-24 bg-red-50 text-red-500 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10'>
-                <AlertCircle size={48} />
-              </div>
-              <h2 className='font-bold text-3xl tracking-tight text-slate-900'>Delete Permanently?</h2>
-              <p className='text-slate-400 text-sm mt-5 leading-relaxed'>
-                You are about to purge this blueprint from the Library. <span className='text-red-500 font-semibold'>This action is irreversible</span> and will erase all data.
-              </p>
-              <div className='flex flex-col gap-4 mt-12'>
-                <button 
-                  onClick={confirmDelete} 
-                  className='w-full py-5 bg-red-500 text-white rounded-2xl uppercase text-[11px] font-black tracking-widest hover:bg-red-600 transition-all shadow-xl shadow-red-100'
-                >
-                  Confirm Deletion
-                </button>
-                <button 
-                  onClick={() => setResumeToDelete(null)} 
-                  className='w-full py-5 text-slate-400 uppercase text-[11px] font-black tracking-widest hover:text-slate-900'
-                >
-                  Keep Document
-                </button>
+          <div className='fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] flex items-center justify-center p-4 animate-in fade-in duration-200'>
+            <div className='bg-white p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95 duration-300'>
+              <div className='size-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6'><Trash2 size={28} /></div>
+              <h2 className='font-bold text-xl text-slate-900'>Delete Resume?</h2>
+              <p className='text-xs text-slate-500 mt-2 leading-relaxed px-4'>Action is irreversible.</p>
+              <div className='grid grid-cols-2 gap-3 mt-8'>
+                <button onClick={() => setResumeToDelete(null)} className='py-3 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors'>Cancel</button>
+                <button onClick={confirmDelete} className='py-3 bg-red-500 text-white rounded-xl text-xs font-bold uppercase tracking-wide hover:bg-red-600 shadow-md hover:shadow-red-200 transition-all'>Delete</button>
               </div>
             </div>
           </div>
         )}
 
-        {/* TEMPLATE GALLERY MODAL */}
         <TemplateGalleryModal
           isOpen={showGalleryModal}
           onClose={() => setShowGalleryModal(false)}
