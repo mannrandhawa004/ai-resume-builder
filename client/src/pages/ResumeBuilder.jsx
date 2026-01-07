@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight,
   FileText, FolderIcon, GraduationCap,
-  Sparkles, User, Type
+  Sparkles, User, Type, Award, Layers
 } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import api from '../configs/api'
@@ -17,8 +17,10 @@ import PersonalInfoForm from '../components/PersonalInfoForm'
 import ProfessionalSummaryForm from '../components/ProfessionalSummaryForm'
 import ExperienceForm from '../components/ExperienceForm'
 import EducationForm from '../components/EducationForm'
-import ProjectForm from '../components/ProjectForm'
+import ProjectForm from '../components/ProjectForm' 
 import SkillsForm from '../components/SkillsForm'
+import CertificationForm from '../components/CertificationForm';
+import CustomSectionForm from '../components/CustomSectionForm';
 
 // UI Components
 import ResumePreview from '../components/ResumePreview'
@@ -37,9 +39,14 @@ const ResumeBuilder = () => {
     education: [],
     project: [],
     skills: [],
+    certifications: [],
+    custom_section: {
+      title: "Activities",
+      items: []
+    },
     template: "",
     accent_color: "#D97706",
-    font_size: "14px", // New Field
+    font_size: "14px",
     public: false,
   })
 
@@ -54,6 +61,8 @@ const ResumeBuilder = () => {
     { id: "education", name: "Education", icon: GraduationCap },
     { id: "projects", name: "Projects", icon: FolderIcon },
     { id: "skills", name: "Skills", icon: Sparkles },
+    { id: "certifications", name: "Certifications", icon: Award },
+    { id: "custom", name: "Custom", icon: Layers }
   ]
 
   const activeSection = sections[activeSectionIndex]
@@ -63,10 +72,16 @@ const ResumeBuilder = () => {
       setIsFetching(true)
       const { data } = await api.get('/api/resumes/get/' + resumeId, { headers: { Authorization: token } })
       if (data.resume) {
-        setResumeData(data.resume)
+        // FIX: Merge incoming data with defaults to prevent "undefined" errors on new fields
+        setResumeData({
+            ...data.resume,
+            certifications: data.resume.certifications || [],
+            custom_section: data.resume.custom_section || { title: "Activities", items: [] }
+        })
         document.title = data.resume.title || "Editor";
       }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to load resume")
     } finally {
       setIsFetching(false)
@@ -95,7 +110,11 @@ const ResumeBuilder = () => {
       });
 
       if (data.resume) {
-        setResumeData(data.resume);
+        setResumeData({
+            ...data.resume,
+            certifications: data.resume.certifications || [],
+            custom_section: data.resume.custom_section || { title: "Activities", items: [] }
+        });
         toast.success("Sync complete");
       }
     } catch (error) {
@@ -113,28 +132,19 @@ const ResumeBuilder = () => {
       education: sample.education,
       project: sample.project,
       skills: sample.skills,
+      certifications: sample.certifications || [],
+      custom_section: sample.custom_section || { title: "Activities", items: [] }
     });
     toast.success("Sample data applied");
   }
 
-  // const downloadResume = async () => {
-  //   const element = document.getElementById('resume-preview');
-  //   if (!element) return;
-  //   const loadingToast = toast.loading("Rendering PDF...");
-  //   try {
-  //     const dataUrl = await toPng(element, { quality: 1.0, pixelRatio:2, backgroundColor: '#ffffff' });
-  //     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (pdf.internal.pageSize.getHeight());
-  //     pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-  //     pdf.save(`${resumeData.title || 'resume'}.pdf`);
-  //     toast.dismiss(loadingToast);
-  //     toast.success("Export successful");
-  //   } catch (error) {
-  //     toast.dismiss(loadingToast);
-  //     toast.error("Export failed");
-  //   }
-  // };
+  const handleDragEnd = (result, sectionKey) => {
+    if (!result.destination) return;
+    const items = Array.from(resumeData[sectionKey]);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setResumeData(prev => ({ ...prev, [sectionKey]: items }));
+  };
 
   const downloadResume = async () => {
     const element = document.getElementById('resume-preview');
@@ -142,26 +152,20 @@ const ResumeBuilder = () => {
     const loadingToast = toast.loading("Rendering PDF...");
 
     try {
-      // 1. Capture the full height of the element
-      const dataUrl = await toPng(element, {
-        quality: 1.0,
-        pixelRatio: 2, // 2 is usually enough for high quality without huge file sizes
-        backgroundColor: '#ffffff'
+      const dataUrl = await toPng(element, { quality: 1.0, pixelRatio: 2, backgroundColor: '#ffffff' });
+      const img = new Image();
+      img.src = dataUrl;
+      await img.decode();
+      const pdfWidth = 210; 
+      const pdfHeight = (img.height * pdfWidth) / img.width;
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: [pdfWidth, pdfHeight]
       });
 
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-      const imgProps = pdf.getImageProperties(dataUrl);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-
-      // 2. Calculate height based on the aspect ratio of the captured image
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      // 3. Add image. If pdfHeight > 297, it will overflow the first page.
-      // To keep it on one page perfectly, we force it to 297:
-      const finalHeight = pdfHeight > 297 ? 297 : pdfHeight;
-
-      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, finalHeight);
+      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${resumeData.title || 'resume'}.pdf`);
 
       toast.dismiss(loadingToast);
@@ -199,7 +203,6 @@ const ResumeBuilder = () => {
           </div>
 
           <div className='flex items-center gap-6'>
-            {/* Font Size Selector */}
             <div className='flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100'>
               <Type size={14} className='text-slate-400' />
               <select
@@ -212,13 +215,10 @@ const ResumeBuilder = () => {
                 <option value="16px">Large</option>
               </select>
             </div>
-
-            {/* Color Picker moved to Top */}
             <div className='flex items-center gap-2'>
               <span className='text-[9px] font-bold text-slate-400 uppercase tracking-widest'>Theme</span>
               <ColorPicker selectedColor={resumeData.accent_color} onChange={(c) => setResumeData(prev => ({ ...prev, accent_color: c }))} />
             </div>
-
             <button onClick={saveResume} className='text-[10px] font-bold text-slate-400 hover:text-amber-600 tracking-[0.2em] uppercase transition-colors'>Save</button>
             <button onClick={downloadResume} className='px-6 py-1.5 bg-amber-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-sm hover:bg-amber-600 transition-all'>Export</button>
           </div>
@@ -259,8 +259,32 @@ const ResumeBuilder = () => {
                 {activeSection.id === 'summary' && <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(d) => setResumeData(prev => ({ ...prev, professional_summary: d }))} setResumeData={setResumeData} />}
                 {activeSection.id === 'experience' && <ExperienceForm data={resumeData.experience} onChange={(d) => setResumeData(prev => ({ ...prev, experience: d }))} />}
                 {activeSection.id === 'education' && <EducationForm data={resumeData.education} onChange={(d) => setResumeData(prev => ({ ...prev, education: d }))} />}
-                {activeSection.id === 'projects' && <ProjectForm data={resumeData.project} onChange={(d) => setResumeData(prev => ({ ...prev, project: d }))} />}
+                
+                {activeSection.id === 'projects' && (
+                  <ProjectForm
+                    data={resumeData.project}
+                    onChange={(d) => setResumeData(prev => ({ ...prev, project: d }))}
+                    onDragEnd={(result) => handleDragEnd(result, 'project')}
+                  />
+                )}
+                
                 {activeSection.id === 'skills' && <SkillsForm data={resumeData.skills} onChange={(d) => setResumeData(prev => ({ ...prev, skills: d }))} />}
+
+                {/* NEW FORMS RENDERING */}
+                {activeSection.id === 'certifications' && (
+                    <CertificationForm 
+                        data={resumeData.certifications || []} 
+                        onChange={(d) => setResumeData(prev => ({ ...prev, certifications: d }))} 
+                    />
+                )}
+                
+                {activeSection.id === 'custom' && (
+                    <CustomSectionForm 
+                        // Fallback added here to prevent crash
+                        data={resumeData.custom_section || { title: "Activities", items: [] }} 
+                        onChange={(d) => setResumeData(prev => ({ ...prev, custom_section: d }))} 
+                    />
+                )}
               </div>
 
               <div className='pt-10 flex items-center justify-between border-t border-slate-50'>
@@ -296,7 +320,7 @@ const ResumeBuilder = () => {
                       data={resumeData}
                       template={resumeData.template}
                       accentColor={resumeData.accent_color}
-                      fontSize={resumeData.font_size} // Passing font size
+                      fontSize={resumeData.font_size}
                     />
                   </div>
                 )}
