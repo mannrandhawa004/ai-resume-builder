@@ -13,16 +13,19 @@ export const enhanceProfessionalSummary = async (req, res) => {
         const response = await ai.chat.completions.create({
             model: process.env.OPENAI_MODEL,
             messages: [
-                { role: "system", content: "Ehnace the summary to add on the resume, make the summary more professional and make it simple" },
+                {
+                    role: "system", content: `You are an expert in resume writing. Your task is to enhance the job summary of a resume. The job summary should be only in 1-2 sentence also highlighting key responsibilities and achievements. Use action verbs and quantifiable results where possible. Make it ATS-friendly. and only return text no options or anything else 
+                    `},
                 {
                     role: "user",
                     content: userContent,
                 },
             ],
-            temperature: 0.2
+            temperature: 0,
         })
 
         const enhancedContent = response.choices[0].message.content;
+        // console.log(enhancedContent)
         return res.status(200).json({ enhancedContent })
     } catch (error) {
         return res.status(400).json({ message: error.message })

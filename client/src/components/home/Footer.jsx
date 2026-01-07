@@ -5,7 +5,7 @@ const Footer = () => {
     <>
 
 <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-gray-500 bg-gradient-to-r from-white via-amber-200/60 to-white mt-40">
-        <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
+        <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[100px]">
             <a href="#">
                 <img src="/logo.svg" alt="logo" className="h-11 w-auto" />
             </a>
@@ -24,7 +24,7 @@ const Footer = () => {
                     <li><a href="/" className="hover:text-amber-500 transition">Company</a></li>
                     <li><a href="/" className="hover:text-amber-500 transition">Blogs</a></li>
                     <li><a href="/" className="hover:text-amber-500 transition">Community</a></li>
-                    <li><a href="/" className="hover:text-amber-500 transition">Careers<span className="text-xs text-white bg-amber-500 rounded-md ml-2 px-2 py-1">We’re hiring!</span></a></li>
+                    <li><a href="/" className="hover:text-amber-500 transition">Careers</a></li>
                     <li><a href="/" className="hover:text-amber-500 transition">About</a></li>
                 </ul>
             </div>

@@ -17,6 +17,11 @@ import ExecutiveSidebarTemplate from '../components/templates/ExecutiveSidebarTe
 import ClassicTemplate from '../components/templates/ClassicTemplate'
 import BoldMinimalTemplate from '../components/templates/BoldMinimalTemplate'
 import CreativeGridTemplate from '../components/templates/CreativeGridTemplate'
+import ViennaTemplate from '../components/templates/ViennaTemplate';
+import NewYorkTemplate from '../components/templates/NewYorkTemplate';
+import LondonTemplate from '../components/templates/LondonTemplate';
+import SpecialistTemplate from '../components/templates/SpecialistTemplate'
+import RightSidebarTemaplate from '../components/templates/RightSidebarTemplate'
 
 const Dashboard = () => {
   const { token, user } = useSelector(state => state.auth)
@@ -40,8 +45,13 @@ const Dashboard = () => {
     'technical': TechnicalTemplate,
     'executive': ExecutiveSidebarTemplate,
     'classic': ClassicTemplate,
-    'bold': BoldMinimalTemplate,
+    'bold-minimal': BoldMinimalTemplate,
     'creative': CreativeGridTemplate,
+    'vienna': ViennaTemplate,
+    'new-york': NewYorkTemplate,
+    'london':LondonTemplate,
+    'specialist':SpecialistTemplate,
+    'right-sidebar':RightSidebarTemaplate,
     'default': MinimalTemplate
   }
 
@@ -147,7 +157,7 @@ const Dashboard = () => {
                 {/* Card Container */}
                 <div
                   onClick={() => navigate(`/app/builder/${resume._id}`)}
-                  className='relative aspect-[1/1.41] bg-white shadow-sm overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-amber-200 transition-all duration-300'
+                  className='relative aspect-[1/1.6] bg-white shadow-sm overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-amber-200 transition-all duration-300'
                 >
 
                   {/* --- 4. REAL TEMPLATE PREVIEW --- */}
