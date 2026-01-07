@@ -6,12 +6,17 @@ import { dummyResumeData } from '../assets/assets'; // Adjust path as needed
 const TEMPLATE_LIST = [
     { id: "classic", name: "The Classic", desc: "Traditional and professional" },
     { id: "modern", name: "Modern Edge", desc: "Clean with strategic color" },
-    { id: "minimal", name: "Ultra Minimal", desc: "Focus on white space" },
-    { id: "minimal-image", name: "Personalized", desc: "Minimal with profile photo" },
+    { id: "minimal", name: "Minimal", desc: "Focus on white space" },
+    { id: "minimal-image", name: "Minimal-image", desc: "Minimal with profile photo" },
     { id: "executive", name: "Executive Sidebar", desc: "High-end corporate layout" },
     { id: "creative", name: "Creative Grid", desc: "Bold magazine-style grid" },
     { id: "bold-minimal", name: "Bold Minimal", desc: "High-contrast authority" },
-    { id: "technical", name: "Technical Pro", desc: "Skill and project focus" }
+    { id: "technical", name: "Technical Pro", desc: "Skill and project focus" },
+    { id: "vienna", name: "Vienna", desc: "modern corporate layout" },
+    { id: "new-york", name: "New York", desc: "Sophisticated editorial layout with vertical timeline" },
+    { id: "london", name: "London", desc: "Classic serif design with full-width section headers." },
+    { id: "specialist", name: "specialist", desc: "Clean with strategic layout" },
+    { id: "right-sidebar", name: "right-sidebar", desc: "High-end corporate layout" }
 ];
 
 const TemplateGalleryModal = ({ isOpen, onClose, accentColor, onSelect, currentTemplate }) => {

@@ -7,6 +7,11 @@ import ExecutiveSidebarTemplate from './templates/ExecutiveSidebarTemplate'
 import CreativeGridTemplate from './templates/CreativeGridTemplate'
 import BoldMinimalTemplate from './templates/BoldMinimalTemplate'
 import TechnicalTemplate from './templates/TechnicalTemplate'
+import ViennaTemplate from './templates/ViennaTemplate'
+import NewYorkTemplate from './templates/NewYorkTemplate';
+import LondonTemplate from './templates/LondonTemplate';
+import SpecialistTemplate from './templates/SpecialistTemplate'
+import RightSidebarTemaplate from './templates/RightSidebarTemplate'
 
 const ResumePreview = ({ data, template, accentColor, fontSize = "14px", classes = "" }) => {
 
@@ -20,6 +25,11 @@ const ResumePreview = ({ data, template, accentColor, fontSize = "14px", classes
       case "creative": return <CreativeGridTemplate {...props} />;
       case "bold-minimal": return <BoldMinimalTemplate {...props} />;
       case "technical": return <TechnicalTemplate {...props} />;
+      case "vienna": return <ViennaTemplate {...props} />
+      case 'new-york': return <NewYorkTemplate {...props} />;
+      case 'london': return <LondonTemplate {...props} />;
+      case "specialist": return <SpecialistTemplate  {...props} />;
+      case "right-sidebar": return <RightSidebarTemaplate {...props} />;
       default: return <ClassicTemplate {...props} />;
     }
   }

@@ -12,7 +12,12 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
         { id: "executive", name: "Executive sidebar", preview: "Premium two-column layout for senior roles" },
         { id: "creative", name: "Creative Grid", preview: "Bold, modern grid layout for technical professionals" },
         { id: "bold-minimal", name: "Bold Minimal", preview: "High-contrast typography for a powerful professional impression." },
-        { id: "technical", name: "Technical Progress", preview: "Focuses on skill mastery and clear professional timelines." }
+        { id: "technical", name: "Technical Progress", preview: "Focuses on skill mastery and clear professional timelines." },
+        { id: "vienna", name: "Vienna", preview: "modern corporate layout" },
+        { id: "new-york", name: "New York", preview: "Sophisticated editorial layout with vertical timeline" },
+        { id: "london", name: "London", preview: "Classic serif design with full-width section headers." },
+        { id: "specialist", name: "specialist", preview: "Clean with strategic layout" },
+        { id: "right-sidebar", name: "right-sidebar", preview: "High-end corporate layout" }
     ]
 
     return (
