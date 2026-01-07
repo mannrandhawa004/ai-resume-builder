@@ -2,14 +2,14 @@ import dummy_profile from './dummy_profile.png'
 
 export const dummyResumeData = [
     {
-        // ----------------------------------------------------- Resume 1 ------------------------------------------------------
+        // ----------------------------------------------------- Resume 1 (Alex - Full Stack) ------------------------------------------------------
         personal_info: {
             full_name: "Alex Smith",
             email: "alex@example.com",
             phone: "0 123456789",
             location: "NY, USA",
-            linkedin: "https://www.linkedin.com",
-            website: "https://www.example.com",
+            linkedin: "https://www.linkedin.com/in/alexsmith",
+            website: "https://www.alexsmith.dev",
             profession: "Full Stack Developer",
             image: dummy_profile
         },
@@ -19,6 +19,32 @@ export const dummyResumeData = [
         public: true,
         professional_summary: "Highly analytical Data Analyst with 6 years of experience transforming complex datasets into actionable insights using SQL, Python, and advanced visualization tools. ",
         skills: ["JavaScript", "React JS", "Full Stack Development", "Git", "GitHub", "NextJS", "Express", "NodeJS", "TypeScript"],
+        certifications: [
+            {
+                name: "AWS Certified Developer - Associate",
+                issuer: "Amazon Web Services",
+                date: "2023-08-15",
+                link: "https://aws.amazon.com/certification/",
+                _id: "cert_001"
+            },
+            {
+                name: "Meta Front-End Developer Professional Certificate",
+                issuer: "Coursera",
+                date: "2022-11-20",
+                link: "https://www.coursera.org/professional-certificates/meta-front-end-developer",
+                _id: "cert_002"
+            }
+        ],
+
+        // NEW: Custom Section (Languages)
+        custom_section: {
+            title: "Languages",
+            items: [
+                { name: "English", description: "Native / Bilingual Proficiency", _id: "cust_001" },
+                { name: "Spanish", description: "Professional Working Proficiency", _id: "cust_002" }
+            ]
+        },
+
         experience: [
             {
                 company: "Example Technologies.",
@@ -72,12 +98,14 @@ export const dummyResumeData = [
                 name: "Team Task Management System",
                 type: "Web Application (Productivity Tool)",
                 description: "TaskTrackr is a collaborative task management system designed for teams to create, assign, track, and manage tasks in real time. ",
+                link: "https://github.com/alex/tasktrackr",
                 _id: "68d4f882c8f0d46dc8a8b139"
             },
             {
                 name: "EduHub - Online Learning Platform",
                 type: "Web Application (EdTech Platform)",
                 description: "EduHub is an online learning platform where instructors can create courses with video lessons, quizzes, and downloadable resources.",
+                link: "https://eduhub.example.com",
                 _id: "68d4f89dc8f0d46dc8a8b147"
             }
         ],
@@ -85,7 +113,7 @@ export const dummyResumeData = [
         createdAt: "2025-09-23T13:39:38.395Z"
     },
     {
-        // ----------------------------------------------------- Resume 2 ------------------------------------------------------
+        // ----------------------------------------------------- Resume 2 (Jordan - Frontend) ------------------------------------------------------
         personal_info: {
             full_name: "Jordan Lee",
             email: "jordan.lee@example.com",
@@ -102,6 +130,34 @@ export const dummyResumeData = [
         public: true,
         professional_summary: "Creative and detail-oriented Frontend Engineer with 5+ years of experience crafting responsive, user-centric web applications using React, Vue, and modern CSS frameworks.",
         skills: ["HTML5", "CSS3", "JavaScript", "React", "Vue.js", "SASS", "Tailwind CSS", "Figma", "Web Accessibility", "REST APIs"],
+
+        // NEW: Certifications
+        certifications: [
+            {
+                name: "Google UX Design Professional Certificate",
+                issuer: "Coursera",
+                date: "2021-05-10",
+                link: "https://coursera.org/share/google-ux",
+                _id: "cert_003"
+            },
+            {
+                name: "JavaScript Algorithms and Data Structures",
+                issuer: "freeCodeCamp",
+                date: "2019-08-20",
+                link: "https://freecodecamp.org/certification/jordan/js-algo",
+                _id: "cert_004"
+            }
+        ],
+
+        // NEW: Custom Section (Awards)
+        custom_section: {
+            title: "Awards",
+            items: [
+                { name: "Employee of the Month", description: "TechSpark Inc. - March 2023", _id: "cust_003" },
+                { name: "Best UI Design", description: "Global Hackathon 2020", _id: "cust_004" }
+            ]
+        },
+
         experience: [
             {
                 company: "TechSpark Inc.",
@@ -147,12 +203,14 @@ export const dummyResumeData = [
                 name: "FitTrack - Fitness Dashboard",
                 type: "Web Application (Health & Fitness)",
                 description: "FitTrack is a fitness analytics dashboard that allows users to log workouts, track progress, and visualize performance through interactive charts.",
+                link: "https://fittrack.demo.com",
                 _id: "78e3b42c2d5ff49286cc1494"
             },
             {
                 name: "ShopEase - E-commerce UI Kit",
                 type: "Frontend UI Kit",
                 description: "ShopEase is a modular e-commerce frontend template with ready-to-use components for product listing, cart management, and responsive navigation.",
+                link: "https://shopease.ui",
                 _id: "78e3b42c2d5ff49286cc1495"
             }
         ],
@@ -160,7 +218,7 @@ export const dummyResumeData = [
         createdAt: "2025-09-25T15:10:21.184Z"
     },
     {
-        // ----------------------------------------------------- Resume 3 ------------------------------------------------------
+        // ----------------------------------------------------- Resume 3 (Riley - Backend) ------------------------------------------------------
         personal_info: {
             full_name: "Riley Morgan",
             email: "riley.morgan@example.com",
@@ -177,6 +235,33 @@ export const dummyResumeData = [
         public: true,
         professional_summary: "Dedicated Backend Developer with 7+ years of experience building secure, high-performance APIs and microservices using Node.js, Python, and PostgreSQL. Passionate about scalability, automation, and clean architecture.",
         skills: ["Node.js", "Python", "PostgreSQL", "MongoDB", "Docker", "Kubernetes", "CI/CD", "Redis", "GraphQL", "AWS"],
+
+        // NEW: Certifications
+        certifications: [
+            {
+                name: "Certified Kubernetes Application Developer (CKAD)",
+                issuer: "The Linux Foundation",
+                date: "2022-03-12",
+                link: "https://training.linuxfoundation.org/certification/ckad/",
+                _id: "cert_005"
+            },
+            {
+                name: "MongoDB Certified Developer",
+                issuer: "MongoDB University",
+                date: "2020-11-05",
+                link: "https://university.mongodb.com/",
+                _id: "cert_006"
+            }
+        ],
+
+        // NEW: Custom Section (Volunteering)
+        custom_section: {
+            title: "Volunteering",
+            items: [
+                { name: "Code for Good", description: "Mentor for junior developers (2021-Present)", _id: "cust_005" }
+            ]
+        },
+
         experience: [
             {
                 company: "DataNest Solutions",
@@ -222,12 +307,14 @@ export const dummyResumeData = [
                 name: "Invoicr - Invoice Management System",
                 type: "Web Application (FinTech)",
                 description: "Invoicr is a secure web platform that allows freelancers and small businesses to generate, track, and automate professional invoices. Built with Node.js, MongoDB, and Stripe integration.",
+                link: "https://invoicr.app",
                 _id: "89f4c53d3e6gg59397dd259l"
             },
             {
                 name: "API Monitor Dashboard",
                 type: "DevOps Tool",
                 description: "A real-time API monitoring dashboard for microservices. Tracks latency, uptime, and error rates using Prometheus and Grafana.",
+                link: "https://github.com/riley/api-mon",
                 _id: "89f4c53d3e6gg59397dd259m"
             }
         ],
