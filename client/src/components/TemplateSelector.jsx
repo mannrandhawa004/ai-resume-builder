@@ -1,66 +1,99 @@
-import { Check, Layout } from 'lucide-react'
-import React, { useState } from 'react'
+import { Check, Layout, ChevronDown } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { TEMPLATE_LIST } from '../configs/templates'; // Import shared list
 
 const TemplateSelector = ({ selectedTemplate, onChange }) => {
     const [isOpen, setIsOpen] = useState(false)
+    const dropdownRef = useRef(null);
 
-    const templates = [
-        { id: "classic", name: "Classic", preview: "A traditional resume format with professional typography" },
-        { id: "modern", name: "Modern", preview: "Sleek design with strategic use of color" },
-        { id: "minimal-image", name: "Minimal Image", preview: "Minimal design with a single image" },
-        { id: "minimal", name: "Minimal", preview: "Ultra-clean design that puts content front and center" },
-        { id: "executive", name: "Executive sidebar", preview: "Premium two-column layout for senior roles" },
-        { id: "creative", name: "Creative Grid", preview: "Bold, modern grid layout for technical professionals" },
-        { id: "bold-minimal", name: "Bold Minimal", preview: "High-contrast typography for a powerful professional impression." },
-        { id: "technical", name: "Technical Progress", preview: "Focuses on skill mastery and clear professional timelines." },
-        { id: "vienna", name: "Vienna", preview: "modern corporate layout" },
-        { id: "new-york", name: "New York", preview: "Sophisticated editorial layout with vertical timeline" },
-        { id: "london", name: "London", preview: "Classic serif design with full-width section headers." },
-        { id: "specialist", name: "specialist", preview: "Clean with strategic layout" },
-        { id: "right-sidebar", name: "right-sidebar", preview: "High-end corporate layout" }
-    ]
+    // Close on click outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const selectedLabel = TEMPLATE_LIST.find(t => t.id === selectedTemplate)?.name || "Select";
 
     return (
-        <div className='relative'>
+        <div className='relative' ref={dropdownRef}>
+            {/* Trigger Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className='flex items-center gap-1 text-sm text-blue-600 bg-gradient-to-br from-blue-50 to-blue-100 ring-blue-300 hover:ring transition-all px-3 py-2 rounded-lg'
+                className={`flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-lg transition-all border ${
+                    isOpen 
+                    ? 'bg-blue-50 border-blue-200 text-blue-700' 
+                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
             >
-                <Layout size={14} /> <span className='max-sm:hidden'>Template</span>
+                <Layout size={14} className={isOpen ? "text-blue-500" : "text-slate-400"} />
+                <span className='hidden sm:inline'>{selectedLabel}</span>
+                <span className='sm:hidden'>Layout</span>
+                <ChevronDown size={12} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
                 <>
-                    {/* Background overlay to close dropdown when clicking outside */}
-                    <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)}></div>
+                    {/* Backdrop for Mobile (Darkens background) */}
+                    <div className="fixed inset-0 bg-black/20 backdrop-blur-[1px] z-40 sm:hidden" onClick={() => setIsOpen(false)} />
 
-                    {/* Dropdown Menu */}
-                    <div className='absolute top-full left-0 w-64 p-3 mt-2 space-y-3 z-20 bg-white rounded-xl border border-gray-200 shadow-xl max-h-[400px] overflow-y-auto scrollbar-hide'>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Select Layout</p>
-                        {templates.map((template) => (
-                            <div
-                                key={template.id}
-                                onClick={() => { onChange(template.id); setIsOpen(false) }}
-                                className={`relative p-3 border rounded-lg cursor-pointer transition-all ${selectedTemplate === template.id ?
-                                    "border-blue-400 bg-blue-50" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50"
+                    {/* Dropdown / Bottom Sheet Container */}
+                    <div className={`
+                        z-50 bg-white shadow-xl border border-slate-200 overflow-hidden flex flex-col
+                        
+                        /* Desktop Styles (Dropdown) */
+                        sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-72 sm:rounded-xl sm:max-h-[400px]
+                        
+                        /* Mobile Styles (Bottom Sheet) */
+                        max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:w-full max-sm:rounded-t-2xl max-sm:max-h-[60vh] max-sm:border-t
+                        
+                        animate-in fade-in slide-in-from-top-2 sm:slide-in-from-top-2 slide-in-from-bottom-10
+                    `}>
+                        
+                        {/* Mobile Handle Bar */}
+                        <div className="sm:hidden flex justify-center pt-3 pb-1">
+                            <div className="w-10 h-1 bg-slate-200 rounded-full" />
+                        </div>
+
+                        <div className="p-3 border-b border-slate-100 bg-slate-50/50">
+                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Select Layout</p>
+                        </div>
+
+                        <div className="overflow-y-auto p-2 space-y-1 sm:space-y-2">
+                            {TEMPLATE_LIST.map((template) => (
+                                <div
+                                    key={template.id}
+                                    onClick={() => { onChange(template.id); setIsOpen(false) }}
+                                    className={`relative flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                                        selectedTemplate === template.id 
+                                        ? "bg-blue-50 ring-1 ring-blue-200" 
+                                        : "hover:bg-slate-50"
                                     }`}
-                            >
-                                {selectedTemplate === template.id && (
-                                    <div className="absolute top-2 right-2">
-                                        <div className='size-4 bg-blue-500 rounded-full flex items-center justify-center'>
-                                            <Check className="w-2.5 h-2.5 text-white" />
-                                        </div>
+                                >
+                                    {/* Small visual indicator of layout style could go here */}
+                                    <div className={`size-8 rounded border flex items-center justify-center shrink-0 ${
+                                        selectedTemplate === template.id ? "bg-white border-blue-200" : "bg-slate-50 border-slate-200"
+                                    }`}>
+                                        <Layout size={14} className={selectedTemplate === template.id ? "text-blue-500" : "text-slate-300"} />
                                     </div>
-                                )}
 
-                                <div className="space-y-1">
-                                    <h4 className={`text-sm font-bold ${selectedTemplate === template.id ? 'text-blue-700' : 'text-gray-700'}`}>
-                                        {template.name}
-                                    </h4>
-                                    <p className='text-[10px] text-gray-400 leading-tight'>{template.preview}</p>
+                                    <div className="flex-1">
+                                        <h4 className={`text-xs font-bold ${selectedTemplate === template.id ? 'text-blue-700' : 'text-slate-700'}`}>
+                                            {template.name}
+                                        </h4>
+                                        <p className='text-[10px] text-slate-400 leading-tight line-clamp-1'>{template.desc}</p>
+                                    </div>
+
+                                    {selectedTemplate === template.id && (
+                                        <Check className="w-4 h-4 text-blue-500" />
+                                    )}
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </>
             )}
