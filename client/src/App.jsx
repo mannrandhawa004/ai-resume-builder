@@ -15,8 +15,32 @@ const Preview = lazy(() => import('./pages/Preview'));
 const Login = lazy(() => import('./pages/Login'));
 
 const PageLoader = () => (
-  <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-    <p>Loading...</p>
+  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white font-sans">
+
+    <div className="flex flex-col items-center gap-5">
+
+      {/* --- Modern Spinner --- */}
+      <div className="relative flex items-center justify-center size-16">
+        {/* Background Ring */}
+        <div className="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+
+        {/* Spinning Accent Ring */}
+        <div className="absolute inset-0 border-4 border-amber-500 rounded-full border-t-transparent animate-spin"></div>
+
+       
+      </div>
+
+      {/* --- Text Content --- */}
+      <div className="text-center space-y-2">
+        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">
+          Resume Builder
+        </h3>
+        <p className="text-xs text-slate-400 font-medium animate-pulse">
+          Preparing your workspace...
+        </p>
+      </div>
+
+    </div>
   </div>
 );
 

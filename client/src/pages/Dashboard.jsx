@@ -8,6 +8,8 @@ import api from '../configs/api'
 import toast from 'react-hot-toast'
 import TemplateGalleryModal from '../components/TemplateGalleryModal'
 
+const templateGlobs = import.meta.glob('../components/templates/*Template.jsx');
+
 const templateCache = {};
 
 const loadTemplate = (name) => {
@@ -15,15 +17,24 @@ const loadTemplate = (name) => {
     .split('-')
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join('');
+  const filePath = `../components/templates/${formattedName}Template.jsx`;
 
   if (!templateCache[formattedName]) {
-    templateCache[formattedName] = lazy(() =>
-      import(`../components/templates/${formattedName}Template`)
-    );
+    const importer = templateGlobs[filePath];
+
+    if (importer) {
+      templateCache[formattedName] = lazy(importer);
+    } else {
+      console.error(`Template not found: ${formattedName}`);
+      templateCache[formattedName] = lazy(() =>
+        import('../components/templates/MinimalTemplate.jsx') // Ensure this path is correct too
+      );
+    }
   }
 
   return templateCache[formattedName];
 };
+
 
 const ResumeCard = React.memo(({ resume, idx, navigate, setResumeToDelete }) => {
   const DynamicTemplate = useMemo(() => loadTemplate(resume.template || 'minimal'), [resume.template]);
@@ -33,26 +44,23 @@ const ResumeCard = React.memo(({ resume, idx, navigate, setResumeToDelete }) => 
       className='group flex flex-col gap-2 sm:gap-3 animate-in fade-in zoom-in-95 duration-500'
       style={{ animationDelay: `${idx * 50}ms` }}
     >
-      {/* FIX 1: EXACT A4 ASPECT RATIO 
-         aspect-[1/1.4142] matches A4 paper perfectly.
-         bg-slate-50 acts as a neutral background if scaling creates tiny gaps.
-      */}
+   
       <div
         onClick={() => navigate(`/app/builder/${resume._id}`)}
         className='relative w-full aspect-[1/1.4142] bg-slate-50 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-amber-400 border border-slate-200 transition-all duration-300'
       >
         <Suspense fallback={<div className="absolute inset-0 bg-slate-100 animate-pulse" />}>
-          
-      
+
+
           <div className='absolute top-0 left-1/2 -translate-x-1/2 w-[210mm] origin-top transform scale-[0.2] xs:scale-[0.24] sm:scale-[0.28] md:scale-[0.32] lg:scale-[0.26] xl:scale-[0.3] 2xl:scale-[0.35]'>
-             
-           
-             <div className='bg-white shadow-sm min-h-[297mm]'>
-                <DynamicTemplate
-                  data={resume}
-                  accentColor={resume.accent_color}
-                />
-             </div>
+
+
+            <div className='bg-white shadow-sm min-h-[297mm]'>
+              <DynamicTemplate
+                data={resume}
+                accentColor={resume.accent_color}
+              />
+            </div>
           </div>
         </Suspense>
 

@@ -6,7 +6,7 @@ A **high-performance, interactive web application** that allows users to create,
 
 ## 🚀 Key Features
 
-* **8 Professional Resume Templates**
+* **13 Professional Resume Templates**
   Includes Executive, Creative Grid, Technical, Minimalist, and more — tailored for different career paths.
 
 * **Live A4 Preview Engine**
